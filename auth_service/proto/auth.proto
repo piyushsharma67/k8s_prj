@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "github.com/piyushsharma67/k8s_project/auth_service/proto";
+
+// AuthService defines the gRPC service for authentication
+service AuthService {
+  // Signup method for user registration
+  rpc Signup (SignupRequest) returns (SignupResponse);
+
+  // Login method for user authentication
+  rpc Login (LoginRequest) returns (LoginResponse);
+
+  // ValidateToken method for checking if a JWT token is valid
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+// Request and Response messages for Signup
+message SignupRequest {
+  string username = 1;   // User's username
+  string password = 2;   // User's password
+}
+
+message SignupResponse {
+  string user_id = 1;    // User ID returned after signup
+}
+
+// Request and Response messages for Login
+message LoginRequest {
+  string username = 1;   // User's username
+  string password = 2;   // User's password
+}
+
+message LoginResponse {
+  string token = 1;      // JWT token returned after successful login
+}
+
+// Request and Response messages for Token Validation
+message ValidateTokenRequest {
+  string token = 1;      // JWT token to be validated
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;        // Boolean indicating whether the token is valid
+}
