@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "github.com/piyushsharma67/k8s_project/auth_service/proto";
+option go_package = "github.com/yourrepo/yourproject/api/authpb";
 
 // AuthService defines the gRPC service for authentication
 service AuthService {
