@@ -9,21 +9,11 @@ import (
 	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 )
 
 var port string
 var dbType string
-
-func loadEnv() error {
-	err := godotenv.Load()
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
 
 var startServer = &cobra.Command{
 	Use: "start",
@@ -42,13 +32,13 @@ var startServer = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			queries:=sql_db.New(pgxpool)
-			_,err=repository.InitialiseRepositories(enums.DBType(dbType),queries,nil)
+			queries := sql_db.New(pgxpool)
+			_, err = repository.InitialiseRepositories(enums.DBType(dbType), queries, nil)
 
-			if err!=nil {
+			if err != nil {
 				log.Fatal(err)
 			}
-		} 
+		}
 	},
 }
 
