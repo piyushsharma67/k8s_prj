@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"k8s_project/auth_service/enums"
-	"k8s_project/auth_service/sql_db"
-	"k8s_project/auth_service/utils"
+	"auth_service/enums"
+	"auth_service/sql_db"
+	"auth_service/utils"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )

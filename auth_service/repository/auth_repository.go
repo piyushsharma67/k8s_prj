@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"k8s_project/auth_service/models"
-	"k8s_project/auth_service/sql_db"
+	"auth_service/models"
+	"auth_service/sql_db"
 )
 
 func (r *PostgresRepository) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {

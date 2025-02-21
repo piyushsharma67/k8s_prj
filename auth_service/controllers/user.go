@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"auth_service/models"
+	"auth_service/utils"
 	"context"
 	"encoding/json"
-	"k8s_project/auth_service/models"
-	"k8s_project/auth_service/utils"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"

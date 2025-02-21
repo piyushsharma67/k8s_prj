@@ -1,13 +1,14 @@
 package cmd
 
 import (
+	"auth_service/enums"
+	"auth_service/proto"
+	"auth_service/repository"
+	"auth_service/sql_db"
 	"context"
 	"fmt"
-	configPkg "k8s_project/auth_service/config"
-	"k8s_project/auth_service/enums"
-	"k8s_project/auth_service/proto"
-	"k8s_project/auth_service/repository"
-	"k8s_project/auth_service/sql_db"
+	configPkg "auth_service/config"
+
 	"log"
 	"net"
 

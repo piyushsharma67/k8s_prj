@@ -1,7 +1,7 @@
 package main
 
 import (
-	"k8s_project/auth_service/cmd"
+	"auth_service/cmd"
 	"log"
 )
 

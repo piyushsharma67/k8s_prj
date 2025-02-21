@@ -2,7 +2,7 @@ package routes
 
 import (
 	"context"
-	"k8s_project/auth_service/utils"
+	"auth_service/utils"
 	"net/http"
 )
 

@@ -1,7 +1,7 @@
 package services
 
 import (
-	"k8s_project/auth_service/repository"
+	"auth_service/repository"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )

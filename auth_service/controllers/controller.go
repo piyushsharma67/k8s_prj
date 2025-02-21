@@ -1,6 +1,6 @@
 package controllers
 
-import "k8s_project/auth_service/services"
+import "auth_service/services"
 
 
 type ControllerStruct struct{

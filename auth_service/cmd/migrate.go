@@ -3,7 +3,7 @@ package cmd
 import (
 	"database/sql"
 	"fmt"
-	configPkg "k8s_project/auth_service/config"
+	configPkg "auth_service/config"
 	"log"
 
 	_ "github.com/lib/pq"

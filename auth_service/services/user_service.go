@@ -1,11 +1,11 @@
 package services
 
 import (
+	"auth_service/models"
+	"auth_service/sql_db"
+	"auth_service/utils"
 	"context"
 	"errors"
-	"k8s_project/auth_service/models"
-	"k8s_project/auth_service/sql_db"
-	"k8s_project/auth_service/utils"
 
 	"github.com/jackc/pgx/v5"
 )

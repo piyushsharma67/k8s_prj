@@ -1,9 +1,10 @@
 package routes
 
 import (
+	"auth_service/controllers"
+	"auth_service/services"
 	"fmt"
-	"k8s_project/auth_service/controllers"
-	"k8s_project/auth_service/services"
+
 	"net/http"
 
 	"time"
@@ -30,6 +31,6 @@ func InitRoutes(service *services.ServiceStruct)*mux.Router{
 	r.HandleFunc("/",c.Health)
 	r.HandleFunc("/v1/signup",c.SignupUser).Methods("POST")
 	r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcmToken)).Methods("POST")
-	
+
 	return r
 }

@@ -1,6 +1,6 @@
 package repository
 
-import "k8s_project/auth_service/sql_db"
+import "auth_service/sql_db"
 
 type PostgresRepository struct {
 	db *sql_db.Queries
