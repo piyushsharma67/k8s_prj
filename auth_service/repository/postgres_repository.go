@@ -1,9 +1,10 @@
 package repository
 
-// type PostgresRepository struct {
-// 	db *database.Queries
-// }
+import "k8s_project/auth_service/sql_db"
 
-// func NewPostgresRepository(db *database.Queries)*PostgresRepository{
-// 	return &PostgresRepository{db:db}
-// }
+type PostgresRepository struct {
+	db *sql_db.Queries
+}
+func NewPostgresRepository(db *sql_db.Queries)*PostgresRepository{
+	return &PostgresRepository{db:db}
+}
