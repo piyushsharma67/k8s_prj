@@ -48,7 +48,7 @@ var startServer = &cobra.Command{
 		if env == "" {
 			log.Fatal("Env not provided")
 		}
-		configPrj, err := configPkg.Loadconfig(env)
+		configPrj, err := configPkg.LoadConfig(env)
 		if err != nil {
 			log.Fatal(err)
 		}

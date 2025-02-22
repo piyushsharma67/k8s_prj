@@ -29,7 +29,7 @@ func init(){
 
 
 func runMigration(direction string){
-	config,err:=configPkg.Loadconfig(env)
+	config,err:=configPkg.LoadConfig(env)
 	if err!=nil{
 		log.Fatal(err)
 	}
