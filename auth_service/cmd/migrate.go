@@ -33,36 +33,44 @@ func runMigration(direction string){
 	if err!=nil{
 		log.Fatal(err)
 	}
-	fmt.Println("connection string",config.GetDSN())
+	
 	dbConn, err := sql.Open("postgres", config.GetDSN())
+	fmt.Println("error is",err)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer dbConn.Close()
 
-	err = goose.SetDialect("postgres")
+	if err = dbConn.Ping(); err != nil {
+		log.Fatalf("Failed to ping database: %v", err)
+	}
+	log.Println("Database ping successful")
 
+	err = goose.SetDialect("postgres")
 	if err != nil {
 		log.Fatalf("Failed to set Goose dialect: %v", err)
 	}
-
+	fmt.Println("Goose dialect set to postgres")
 	// Apply migrations from the "db/migrations" directory
 	migrationsDir := "sql_db/migrations"
 	switch direction {
 	case "up":
+		fmt.Println("Running goose.Up")
 		err = goose.Up(dbConn, migrationsDir)
 	case "down":
+		fmt.Println("Running goose.Down")
 		err = goose.Down(dbConn, migrationsDir)
 	case "redo":
+		fmt.Println("Running goose.Redo")
 		err = goose.Redo(dbConn, migrationsDir)
 	case "status":
+		fmt.Println("Running goose.Status")
 		err = goose.Status(dbConn, migrationsDir)
 	default:
-		log.Fatalf("Invalid migration direction: %s. Use 'up', 'down', or 'redo'.", direction)
+		log.Fatalf("Invalid migration direction: %s. Use 'up', 'down', 'redo', or 'status'.", direction)
 	}
 	if err != nil {
 		log.Fatalf("Migration failed: %v", err)
 	}
-
 	fmt.Println("✅ Database migration applied successfully!")
 }
