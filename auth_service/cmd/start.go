@@ -1,13 +1,17 @@
 package cmd
 
 import (
+	configPkg "auth_service/config"
 	"auth_service/enums"
+	"auth_service/grpc_controller"
 	"auth_service/proto"
 	"auth_service/repository"
+	"auth_service/routes"
+	"auth_service/services"
 	"auth_service/sql_db"
 	"context"
 	"fmt"
-	configPkg "auth_service/config"
+	"net/http"
 
 	"log"
 	"net"
@@ -29,17 +33,24 @@ func runGrpcServer(){
 	}
 
 	server:=grpc.NewServer()
-	proto.RegisterAuthServiceServer(server,&proto.UnimplementedAuthServiceServer{})
+	proto.RegisterAuthServiceServer(server,&grpc_controller.GrpcControllerStruct{})
 	log.Println("Starting gRPC server on port", port)
 
-	log.Printf("Starting gRPC server on port %s", port)
 	if err := server.Serve(listener); err != nil {
 		log.Fatalf("Failed to start gRPC server: %v", err)
 	}
 }
 
-func runHttpsServer(){
-	log.Println("Starting https server on port", port)
+func runHttpsServer(repo *repository.Repositories){
+	service:=services.ServiceStruct{}
+	instance:=service.InitialiseService(repo)
+	r:=routes.InitRoutes(instance)
+
+	fmt.Println("Running http server on port",port)
+	addr := fmt.Sprintf(":%s", port)
+	if err := http.ListenAndServe(addr, r); err != nil {
+		log.Fatal(err)
+	}
 }
 
 var startServer = &cobra.Command{
@@ -52,7 +63,7 @@ var startServer = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-
+		var repo *repository.Repositories
 		if dbType == string(enums.Postgres) {
 			pgxpool, err := pgxpool.New(context.Background(), configPrj.GetDSN())
 
@@ -60,7 +71,7 @@ var startServer = &cobra.Command{
 				log.Fatal(err)
 			}
 			queries := sql_db.New(pgxpool)
-			_, err = repository.InitialiseRepositories(enums.DBType(dbType), queries, nil)
+			repo, err = repository.InitialiseRepositories(enums.DBType(dbType), queries, nil)
 
 			if err != nil {
 				log.Fatal(err)
@@ -70,7 +81,7 @@ var startServer = &cobra.Command{
 		if connType == string(enums.Grpc){
 			runGrpcServer()
 		}else{
-			runHttpsServer()
+			runHttpsServer(repo)
 		}
 
 	},

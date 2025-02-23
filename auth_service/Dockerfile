@@ -29,4 +29,4 @@ COPY --from=builder /app/auth-service .
 EXPOSE 8080
 
 # Set the correct entrypoint to run the binary with arguments
-CMD ["/root/auth-service", "start", "--env", "local"]
+CMD ["/root/auth-service", "start", "--env", "local","--conn","https"]
