@@ -45,9 +45,48 @@ func (c *ControllerStruct) SignupUser(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (c *ControllerStruct)LoginUser(w http.ResponseWriter,r *http.Request){
+	if r.Method != http.MethodPost {
+		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
+		return
+	}
+
+	var user models.User
+
+	validate := validator.New()
+
+	if err := validate.Struct(user); err != nil {
+		utils.ErrorResponse(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), utils.ApiTimeoutTime)
+
+	defer cancel()
+
+	db_user, err := c.service.GetUserByEmail(ctx,&user)
+
+	if err!=nil{
+		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
+		return
+	}
+
+	token,err:=utils.EncodeToken(user.ID)
+
+	if err!=nil{
+		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
+		return
+	}
+
+	db_user.Token=token
+
+	utils.SuccessResponse(w,db_user)
+	return
+}
+
 func (c *ControllerStruct) SaveUserFcmToken(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method != http.MethodPost {
+	if r.Method != http.MethodGet {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
 		return
 	}

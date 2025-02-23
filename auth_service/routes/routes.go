@@ -30,6 +30,7 @@ func InitRoutes(service *services.ServiceStruct)*mux.Router{
 
 	r.HandleFunc("/",c.Health)
 	r.HandleFunc("/v1/signup",c.SignupUser).Methods("POST")
+	r.HandleFunc("/login",c.LoginUser).Methods("GET")
 	r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcmToken)).Methods("POST")
 
 	return r

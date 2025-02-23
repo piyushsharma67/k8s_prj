@@ -1,8 +1,11 @@
 package utils
 
 import (
-    "encoding/json"
-    "net/http"
+	"encoding/json"
+	"net/http"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // ErrorResponse sends a structured error response in JSON format
@@ -23,4 +26,8 @@ func ErrorResponse(w http.ResponseWriter, r *http.Request, statusCode int, messa
         // If encoding fails, return a generic server error
         http.Error(w, "Internal server error", http.StatusInternalServerError)
     }
+}
+
+func GRPCErrorResponse(code codes.Code, message string) error {
+	return status.Error(code, message)
 }

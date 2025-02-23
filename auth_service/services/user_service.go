@@ -49,6 +49,14 @@ func (r *ServiceStruct) InsertUserInDB(ctx context.Context, user *models.User) (
 	return nil, utils.USER_ALREADY_EXISTS
 }
 
+func (r *ServiceStruct) GetUserByEmail(ctx context.Context, user *models.User) (*models.User, error) {
+	user, err := r.Repository.AuthRepo.GetUserByEmail(ctx, user.Email)
+	if err != nil {
+		return nil, err
+	}
+	return user,nil
+}
+
 func (r *ServiceStruct) InsertUserFCMInDB(ctx context.Context, fcmToken string) error {
 
 	userId, _ := ctx.Value("userId").(int32)

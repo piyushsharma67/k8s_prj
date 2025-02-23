@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package auth;
+package proto;
 
-option go_package = "github.com/yourrepo/yourproject/api/authpb";
+// option go_package = "./";
 
 // AuthService defines the gRPC service for authentication
 service AuthService {
@@ -24,7 +24,7 @@ message SignupRequest {
 }
 
 message SignupResponse {
-  string id = 1;  
+  int32 id = 1;  
   string name = 2;
   string email = 3;
   string token = 4;
@@ -38,7 +38,7 @@ message LoginRequest {
 }
 
 message LoginResponse {
-  string id = 1;    
+  int32 id = 1;    
   string name = 2;
   string email = 3;
   string token = 4;
