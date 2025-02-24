@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+
+// option go_package = "./proto";
+
+// NotificationService defines the gRPC service for sending notifications
+service NotificationService {
+  rpc SendMobileNotification (SendNotificationRequest) returns (SendNotificationResponse);
+}
+
+// Request and Response messages for Signup
+message SendNotificationRequest {
+  string userId = 1;   // User's username
+  string body = 2; 
+  string title =3 ;  // User's password
+}
+
+message SendNotificationResponse {
+  bool is_send =1;
+}

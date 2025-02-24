@@ -79,11 +79,8 @@ var startServer = &cobra.Command{
 			}
 		}
 
-		if connType == string(enums.Grpc){
-			runGrpcServer()
-		}else{
-			runHttpsServer(repo)
-		}
+		go runGrpcServer()
+		go runHttpsServer(repo)
 
 	},
 }
