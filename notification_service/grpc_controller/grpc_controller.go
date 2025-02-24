@@ -1,14 +1,15 @@
 package grpc_controller
 
-import "notification_service/repository"
+import (
+	"notification_service/service"
+)
 
-
-type GrpcControllerStruct struct{
-	repository repository.Repository
+type GrpcControllerStruct struct {
+	service service.ServiceStruct
 }
 
-func InitialiseGrpcController(repository repository.Repository)*GrpcControllerStruct{
+func InitialiseGrpcController(repository service.ServiceStruct) *GrpcControllerStruct {
 	return &GrpcControllerStruct{
-		repository: repository,
+		service: repository,
 	}
 }
