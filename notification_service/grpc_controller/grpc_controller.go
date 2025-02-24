@@ -7,12 +7,12 @@ import (
 
 type GrpcControllerStruct struct {
 	*proto.UnimplementedNotificationServiceServer
-	service service.ServiceStruct
+	Service *service.ServiceStruct
 }
 
-func InitialiseGrpcController(repository service.ServiceStruct) *GrpcControllerStruct {
+func InitialiseGrpcController(service *service.ServiceStruct) *GrpcControllerStruct {
 	return &GrpcControllerStruct{
-		service: repository,
+		Service: service,
 	}
 }
 
