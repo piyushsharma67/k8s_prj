@@ -5,7 +5,10 @@ import (
 	"auth_service/enums"
 	"auth_service/grpc_controller"
 	"auth_service/proto"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 
 	"auth_service/repository"
 	"auth_service/routes"
@@ -28,7 +31,7 @@ var dbType string
 var connType string
 
 func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
-	addr := fmt.Sprintf(":%s", port)
+	addr := fmt.Sprintf(":%s", "50051")
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatal(err)
@@ -46,7 +49,9 @@ func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	}()
 
 	<-ctx.Done()
-	defer wg.Done()
+	wg.Done()
+
+	server.GracefulStop()
 }
 
 func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync.WaitGroup) {
@@ -63,7 +68,7 @@ func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync
 	}()
 
 	<-ctx.Done()
-	defer wg.Done()
+	wg.Done()
 }
 
 var startServer = &cobra.Command{
@@ -98,7 +103,15 @@ var startServer = &cobra.Command{
 		go runGrpcServer(ctx, &wg)
 		go runHttpsServer(repo,ctx,&wg)
 
-		defer cancel()
+		stop := make(chan os.Signal, 1)
+		signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+
+		<-stop // Wait for termination signal
+		log.Println("Shutting down services...")
+
+		cancel()
+
+		wg.Wait()
 
 	},
 }
