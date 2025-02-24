@@ -4,15 +4,25 @@ import (
 	"context"
 	"log"
 	"net"
+	configPkg "notification_service/config"
+	"notification_service/enums"
+	"notification_service/grpc_controller"
 	"notification_service/proto"
+	"notification_service/repository"
+	"notification_service/sql_db"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 )
+
+var port string
+var dbType string
+var connType string
 
 func startGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	listener, err := net.Listen("tcp", ":50051")
@@ -22,7 +32,7 @@ func startGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	grpcServer := grpc.NewServer()
 
 	// Register your gRPC service here
-	proto.RegisterNotificationServiceServer(grpcServer, &proto.UnimplementedNotificationServiceServer{})
+	proto.RegisterNotificationServiceServer(grpcServer, &grpc_controller.GrpcControllerStruct{})
 
 	go func() {
 		log.Println("Starting gRPC server on port 50051...")
@@ -89,6 +99,29 @@ var startServer = &cobra.Command{
 	Use: "start",
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx, cancel := context.WithCancel(context.Background())
+
+		if env == "" {
+			log.Fatal("Env not provided")
+		}
+		configPrj, err := configPkg.LoadConfig(env)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var repo *repository.Repository
+		if dbType == string(enums.Postgres) {
+			pgxpool, err := pgxpool.New(context.Background(), configPrj.GetDSN())
+
+			if err != nil {
+				log.Fatal(err)
+			}
+			queries := sql_db.New(pgxpool)
+			repo, err = repository.InitialiseRepositories(enums.DBType(dbType), queries, nil)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		
 
 		var wg sync.WaitGroup
 
