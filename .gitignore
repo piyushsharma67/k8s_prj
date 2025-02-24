@@ -1,2 +1,3 @@
 auth_service/.env
 notification_service/.env
+main_server/.env
