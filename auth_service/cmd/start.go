@@ -5,6 +5,7 @@ import (
 	"auth_service/enums"
 	"auth_service/grpc_controller"
 	"auth_service/proto"
+	"sync"
 
 	"auth_service/repository"
 	"auth_service/routes"
@@ -26,36 +27,47 @@ var port string
 var dbType string
 var connType string
 
-func runGrpcServer(){
+func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	addr := fmt.Sprintf(":%s", port)
-	listener,err:=net.Listen("tcp",addr)
-	if err!=nil{
+	listener, err := net.Listen("tcp", addr)
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	server:=grpc.NewServer()
-	proto.RegisterAuthServiceServer(server,&grpc_controller.GrpcControllerStruct{})
+	server := grpc.NewServer()
+	proto.RegisterAuthServiceServer(server, &grpc_controller.GrpcControllerStruct{})
 	log.Println("Starting gRPC server on port", port)
 
-	if err := server.Serve(listener); err != nil {
-		log.Fatalf("Failed to start gRPC server: %v", err)
-	}
+	go func() {
+		log.Println("Starting gRPC server on port 50051...")
+		if err := server.Serve(listener); err != nil {
+			log.Fatalf("gRPC server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+	defer wg.Done()
 }
 
-func runHttpsServer(repo *repository.Repositories){
-	service:=services.ServiceStruct{}
-	instance:=service.InitialiseService(repo)
-	r:=routes.InitRoutes(instance)
+func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync.WaitGroup) {
+	service := services.ServiceStruct{}
+	instance := service.InitialiseService(repo)
+	r := routes.InitRoutes(instance)
 
-	fmt.Println("Running http server on port",port)
-	addr := fmt.Sprintf(":%s", port)
-	if err := http.ListenAndServe(addr, r); err != nil {
-		log.Fatal(err)
-	}
+	go func() {
+		fmt.Println("Running http server on port", port)
+		addr := fmt.Sprintf(":%s", port)
+		if err := http.ListenAndServe(addr, r); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	<-ctx.Done()
+	defer wg.Done()
 }
 
 var startServer = &cobra.Command{
-	Use:  "start",
+	Use: "start",
 	Run: func(cmd *cobra.Command, args []string) {
 		if env == "" {
 			log.Fatal("Env not provided")
@@ -79,8 +91,14 @@ var startServer = &cobra.Command{
 			}
 		}
 
-		go runGrpcServer()
-		go runHttpsServer(repo)
+		ctx, cancel := context.WithCancel(context.Background())
+		var wg sync.WaitGroup
+		wg.Add(2)
+
+		go runGrpcServer(ctx, &wg)
+		go runHttpsServer(repo,ctx,&wg)
+
+		defer cancel()
 
 	},
 }
