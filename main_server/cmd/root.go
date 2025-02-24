@@ -9,7 +9,6 @@ import (
 
 
 var env string
-var envs=[]string{"local","dev","stage"}
 
 var RootCommand = &cobra.Command{
 	Use: "auth",
