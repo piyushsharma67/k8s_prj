@@ -1,0 +1,10 @@
+package repository
+
+import "main_server/sql_db"
+
+type PostgresRepository struct {
+	db *sql_db.Queries
+}
+func NewPostgresRepository(db *sql_db.Queries)*PostgresRepository{
+	return &PostgresRepository{db:db}
+}

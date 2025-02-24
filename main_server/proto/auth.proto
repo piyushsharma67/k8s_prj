@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package proto;
+
+// option go_package = "./";
+
+// AuthService defines the gRPC service for authentication
+service AuthService {
+  // Signup method for user registration
+  rpc Signup (SignupRequest) returns (SignupResponse);
+
+  // Login method for user authentication
+  rpc Login (LoginRequest) returns (LoginResponse);
+
+  // ValidateToken method for checking if a JWT token is valid
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+// Request and Response messages for Signup
+message SignupRequest {
+  string name = 1;   // User's username
+  string password = 2; 
+  string email =3 ;  // User's password
+}
+
+message SignupResponse {
+  int32 id = 1;  
+  string name = 2;
+  string email = 3;
+  string token = 4;
+  
+}
+
+// Request and Response messages for Login
+message LoginRequest {
+  string email = 1;   // User's username
+  string password = 2;   // User's password
+}
+
+message LoginResponse {
+  int32 id = 1;    
+  string name = 2;
+  string email = 3;
+  string token = 4;
+}
+
+// Request and Response messages for Token Validation
+message ValidateTokenRequest {
+  string token = 1;      // JWT token to be validated
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;        // Boolean indicating whether the token is valid
+}
