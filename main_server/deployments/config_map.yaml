@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: main-server-config
+  namespace: default  # Optional, depending on your namespace
+data:
+  HTTP_PORT: "8080"   # HTTP Port the service listens on

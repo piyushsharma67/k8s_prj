@@ -51,6 +51,10 @@ var startServer = &cobra.Command{
 		service := services.ServiceStruct{}
 		instance := service.InitialiseService(repo)
 		r := routes.InitRoutes(instance)
+		fmt.Println("env is",env)
+		if env!="local"{
+			port=os.Getenv("HTTP_PORT")
+		}
 
 		fmt.Println("Running http server on port", port)
 		addr := fmt.Sprintf(":%s", port)

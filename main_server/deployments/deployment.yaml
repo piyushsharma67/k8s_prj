@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: main-server
-        image: piyush67sharma/main_server:1.1  # Replace with your Docker Hub image
+        image: piyush67sharma/main_server:1.4  # Replace with your Docker Hub image
         ports:
         - containerPort: 8080  # Adjust port based on your app
         env:
@@ -45,6 +45,11 @@ spec:
             secretKeyRef:
               name: db-secret
               key: DB_SSL_MODE
+        - name: HTTP_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: main-server-config  # Referring to the ConfigMap name
+              key: HTTP_PORT  # Key from the ConfigMap
       # If private image, uncomment below and use the secret
       imagePullSecrets:
       - name: regcred
