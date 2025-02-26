@@ -5,3 +5,5 @@ metadata:
   namespace: default  # Optional, depending on your namespace
 data:
   HTTP_PORT: "8080"   # HTTP Port the service listens on
+  AUTH_SERVICE_URL: "http://auth-service:8080"  # HTTP service
+  AUTH_SERVICE_GRPC_URL: "auth-service:50051"  # gRPC service
