@@ -10,7 +10,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func (c *ControllerStruct) SignupUser(w http.ResponseWriter, r *http.Request) {
+func (c *ControllerStruct) SignupHttp(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
 		return
@@ -45,7 +45,7 @@ func (c *ControllerStruct) SignupUser(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (c *ControllerStruct)LoginUser(w http.ResponseWriter,r *http.Request){
+func (c *ControllerStruct)LoginHttp(w http.ResponseWriter,r *http.Request){
 	if r.Method != http.MethodPost {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
 		return
@@ -84,7 +84,7 @@ func (c *ControllerStruct)LoginUser(w http.ResponseWriter,r *http.Request){
 	return
 }
 
-func (c *ControllerStruct) SaveUserFcmToken(w http.ResponseWriter, r *http.Request) {
+func (c *ControllerStruct) SaveUserFcmHttp(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodGet {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
