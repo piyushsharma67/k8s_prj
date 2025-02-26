@@ -11,7 +11,7 @@ spec:
       targetPort: 50051   # Port your gRPC server is listening on
       name: grpc
     - protocol: TCP
-      port: 8081        # External HTTP port
-      targetPort: 8081   # Port your HTTP server is listening on
+      port: 8080       # External HTTP port
+      targetPort: 8080   # Port your HTTP server is listening on
       name: http
   type: NodePort
