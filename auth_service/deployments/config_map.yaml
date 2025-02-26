@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-config
+  namespace: default  # Optional, depending on your namespace
+data:
+  HTTP_PORT: "8081"   # HTTP Port the service listens on
+  GRPC_PORT: "50051"  # gRPC Port the service listens on
