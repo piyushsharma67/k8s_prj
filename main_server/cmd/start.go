@@ -52,7 +52,13 @@ func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync.WaitGroup) {
 	service := services.ServiceStruct{}
 	instance := service.InitialiseService(repo)
-	r := routes.InitRoutes(instance)
+
+	grpcConn, err := grpc.NewClient(os.Getenv("AUTH_SERVICE_GRPC_URL"), grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect to auth service: %v", err)
+	}
+	authServiceClient := proto.NewAuthServiceClient(grpcConn)
+	r := routes.InitRoutes(instance,authServiceClient)
 
 	go func() {
 		fmt.Println("Running http server on port", os.Getenv("HTTP_PORT"))

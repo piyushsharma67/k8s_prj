@@ -34,7 +34,7 @@ func (c *ControllerStruct) SignupUser(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	db_user, err := c.service.InsertUserInDB(ctx, &user)
+	db_user, err := c.Service.InsertUserInDB(ctx, &user)
 
 	if err != nil {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, err.Error())
@@ -64,7 +64,7 @@ func (c *ControllerStruct)LoginUser(w http.ResponseWriter,r *http.Request){
 
 	defer cancel()
 
-	db_user, err := c.service.GetUserByEmail(ctx,&user)
+	db_user, err := c.Service.GetUserByEmail(ctx,&user)
 
 	if err!=nil{
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
@@ -112,7 +112,7 @@ func (c *ControllerStruct) SaveUserFcmToken(w http.ResponseWriter, r *http.Reque
 
 	ctx = context.WithValue(ctx, "userId", userId)
 
-	if err := c.service.InsertUserFCMInDB(ctx, fcm_token.FcmToken); err != nil {
+	if err := c.Service.InsertUserFCMInDB(ctx, fcm_token.FcmToken); err != nil {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, err.Error())
 		return
 	}

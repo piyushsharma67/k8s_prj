@@ -11,6 +11,7 @@ import (
 )
 
 func (r *ServiceStruct) InsertUserInDB(ctx context.Context, user *models.User) (*models.User, error) {
+	
 	_, err := r.Repository.AuthRepo.GetUserByEmail(ctx, user.Email)
 	if err != nil {
 		// Check if error is "record not found"

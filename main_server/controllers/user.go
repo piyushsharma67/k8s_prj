@@ -8,15 +8,26 @@ import (
 	"main_server/proto"
 	"main_server/utils"
 	"net/http"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 )
 
 func (c *ControllerStruct) SignupUser(w http.ResponseWriter, r *http.Request) {
+	timestart:=time.Now()
 	if r.Method != http.MethodPost {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
 		return
 	}
+
+	defer func(){
+		if re := recover(); re != nil {
+			// Handle the panic
+			utils.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error")
+			// Optionally log the panic
+			fmt.Println("Recovered from panic:", r)
+		}
+	}()
 
 	var user models.User
 
@@ -36,17 +47,22 @@ func (c *ControllerStruct) SignupUser(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	authResponse,err:=c.authService.Signup(ctx,&proto.SignupRequest{
-		Name: user.Name,
-		Email: user.Email,
+	authResponse, err := c.authService.Signup(ctx, &proto.SignupRequest{
+		Name:     user.Name,
+		Email:    user.Email,
 		Password: user.Password,
 	})
 
-	if err!=nil{
+	if err != nil {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
+	fmt.Println("elapsed",time.Since(timestart))
+	utils.SuccessResponse(w, &authResponse)
 
-	fmt.Println(authResponse)
+	defer recover()
+	
 	return
+
+	
 }
