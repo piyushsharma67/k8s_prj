@@ -2,3 +2,4 @@
 auth_service/secret.text
 notification_service/.env
 secret.text
+/tmp

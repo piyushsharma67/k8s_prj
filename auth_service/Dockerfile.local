@@ -16,4 +16,4 @@ RUN go install github.com/air-verse/air@latest
 EXPOSE 8080
 
 # Set the correct entrypoint to run the binary with air for hot-reloading
-CMD ["air"]
+CMD ["air","start","--env","local"]
