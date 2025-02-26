@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-server
+spec:
+  selector:
+    app: main-server
+  ports:
+  - protocol: TCP
+    port: 80       # External port to expose
+    targetPort: 8080 # Port inside the container
+  type: NodePort # Change to NodePort if using Minikube

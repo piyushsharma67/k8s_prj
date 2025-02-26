@@ -31,7 +31,7 @@ var dbType string
 var connType string
 
 func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
-	addr := fmt.Sprintf(":%s", "50051")
+	addr := fmt.Sprintf(":%s", os.Getenv("GRPC_PORT"))
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatal(err)
@@ -39,10 +39,9 @@ func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 
 	server := grpc.NewServer()
 	proto.RegisterAuthServiceServer(server, &grpc_controller.GrpcControllerStruct{})
-	log.Println("Starting gRPC server on port", port)
 
 	go func() {
-		log.Println("Starting gRPC server on port 50051...")
+		log.Println("Starting gRPC server on port ..",os.Getenv("GRPC_PORT"))
 		if err := server.Serve(listener); err != nil {
 			log.Fatalf("gRPC server error: %v", err)
 		}
@@ -60,8 +59,8 @@ func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync
 	r := routes.InitRoutes(instance)
 
 	go func() {
-		fmt.Println("Running http server on port", port)
-		addr := fmt.Sprintf(":%s", port)
+		fmt.Println("Running http server on port", os.Getenv("HTTP_PORT"))
+		addr := fmt.Sprintf(":%s", os.Getenv("HTTP_PORT"))
 		if err := http.ListenAndServe(addr, r); err != nil {
 			log.Fatal(err)
 		}
