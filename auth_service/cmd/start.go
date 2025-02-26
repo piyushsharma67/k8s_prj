@@ -28,7 +28,6 @@ import (
 
 var port string
 var dbType string
-var connType string
 
 func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	addr := fmt.Sprintf(":%s", os.Getenv("GRPC_PORT"))
@@ -118,6 +117,5 @@ var startServer = &cobra.Command{
 func init() {
 	startServer.Flags().StringVarP(&port, "port", "p", "8080", "Port to run the server on")
 	startServer.Flags().StringVar(&dbType, "db", "postgres", "Database type (postgres or mongo)")
-	startServer.Flags().StringVar(&connType, "conn", "grpc", "Connection type (grpc or https)")
 	RootCommand.AddCommand(startServer)
 }

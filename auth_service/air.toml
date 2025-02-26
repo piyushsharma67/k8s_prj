@@ -1,0 +1,18 @@
+# .air.toml for auth-service
+
+root = "."
+
+[build]
+  cmd = "go build -o auth-service ."
+  bin = "auth-service"
+  include = [ "." ]
+  exclude = [ "assets", "tmp", "vendor", "node_modules" ]
+
+[watch]
+  dirs = ["."]
+  extensions = ["go", "tpl", "tmpl", "html"]
+  delay = 1000
+
+[run]
+  cmd = "./auth-service"
+  args = ["start", "--env", "local"]
