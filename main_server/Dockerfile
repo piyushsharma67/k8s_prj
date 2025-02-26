@@ -10,10 +10,10 @@ RUN go mod download
 COPY . .
 
 # Build the Go binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o auth-service main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main_server main.go
 
 # Ensure the binary is executable
-RUN chmod +x auth-service
+RUN chmod +x main_server
 
 # Runtime stage
 FROM alpine:latest
@@ -23,10 +23,10 @@ WORKDIR /root/
 RUN apk add --no-cache ca-certificates
 
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app/auth-service .
+COPY --from=builder /app/main_server .
 
 # Expose the application port
 EXPOSE 8080
 
 # Set the correct entrypoint to run the binary with arguments
-CMD ["/root/auth-service", "start", "--env", "local","--conn","https"]
+CMD ["/root/main_server", "start", "--env", "local","--conn","https"]
