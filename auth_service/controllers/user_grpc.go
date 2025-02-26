@@ -14,11 +14,11 @@ import (
 func (s *ControllerStruct) Signup(ctx context.Context, details *proto.SignupRequest) (*proto.SignupResponse, error) {
 	validate := validator.New()
 
-	// defer  func(){
-	// 	if r:=recover();r!=nil{
-	// 		fmt.Printf("Recovered from panic: %v\n", r)
-	// 	}
-	// }()
+	defer  func(){
+		if r:=recover();r!=nil{
+			fmt.Printf("Recovered from panic: %v\n", r)
+		}
+	}()
 
 	if err := validate.Struct(details); err != nil {
 		return nil, utils.GRPCErrorResponse(codes.InvalidArgument, err.Error())
