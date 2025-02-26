@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build:
+      context: ./auth_service   # Path to the auth_service folder
+      dockerfile: Dockerfile.local  
+    container_name: auth-service_local
+    ports:
+      - "8080:8080"  # Mapping the port inside the container to your local machine
+    networks:
+      - microservices-network
+    environment:
+      - DB_HOST=auth-db
+      - DB_PORT=5432
+
+  main-server:
+    build:
+      context: ./main_server  # Path to the main_server folder
+      dockerfile: Dockerfile.local  
+    container_name: main-server_local
+    ports:
+      - "8081:8081"  # Mapping the port inside the container to your local machine
+    networks:
+      - microservices-network
+    depends_on:
+      - auth-service  # main-server depends on auth-service
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:8080  # Point to the auth-service container
+
+networks:
+  microservices-network:
+    driver: bridge

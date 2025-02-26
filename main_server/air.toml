@@ -1,0 +1,18 @@
+# .air.toml for main-server
+
+root = "."
+
+[build]
+  cmd = "go build -o main_server ."
+  bin = "main_server"
+  include = [ "." ]
+  exclude = [ "assets", "tmp", "vendor", "node_modules" ]
+
+[watch]
+  dirs = ["."]
+  extensions = ["go", "tpl", "tmpl", "html"]
+  delay = 1000
+
+[run]
+  cmd = "./main_server"
+  args = ["start", "--env", "dev", "--conn", "https"]

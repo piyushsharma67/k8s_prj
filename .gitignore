@@ -1,5 +1,4 @@
-auth_service/.env
+.env
 auth_service/secret.text
 notification_service/.env
-main_server/.env
 secret.text
