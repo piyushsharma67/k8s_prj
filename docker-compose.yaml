@@ -12,6 +12,9 @@ services:
       - microservices-network
     env_file:
       - .env
+    environment:
+      - GRPC_PORT=50051
+      - HTTP_PORT=8080
 
   main-server:
     build:
@@ -26,6 +29,8 @@ services:
       - auth-service  # main-server depends on auth-service
     env_file:
       - .env
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:8080
 
 networks:
   microservices-network:

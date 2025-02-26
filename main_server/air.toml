@@ -14,5 +14,4 @@ root = "."
   delay = 1000
 
 [run]
-  cmd = "./main_server"
-  args = ["start", "--env", "dev", "--conn", "https"]
+  cmd = "./main_server start --env dev"

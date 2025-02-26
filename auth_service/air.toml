@@ -14,5 +14,4 @@ root = "."
   delay = 1000
 
 [run]
-  cmd = "./auth-service"
-  args = ["start", "--env", "local"]
+  cmd = "./auth-service start --env local"
