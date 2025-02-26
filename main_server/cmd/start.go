@@ -6,22 +6,68 @@ import (
 	"log"
 	configPkg "main_server/config"
 	"main_server/enums"
+	"main_server/grpc_controller"
+	"main_server/proto"
 	"main_server/repository"
 	"main_server/routes"
 	"main_server/services"
 	"main_server/sql_db"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
 )
 
 var port string
 var dbType string
 var connType string
+
+
+func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
+	addr := fmt.Sprintf(":%s", os.Getenv("GRPC_PORT"))
+	listener, err := net.Listen("tcp", addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	server := grpc.NewServer()
+	proto.RegisterAuthServiceServer(server, &grpc_controller.GrpcControllerStruct{})
+
+	go func() {
+		log.Println("Starting gRPC server on port ..",os.Getenv("GRPC_PORT"))
+		if err := server.Serve(listener); err != nil {
+			log.Fatalf("gRPC server error: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+	wg.Done()
+
+	server.GracefulStop()
+}
+
+func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync.WaitGroup) {
+	service := services.ServiceStruct{}
+	instance := service.InitialiseService(repo)
+	r := routes.InitRoutes(instance)
+
+	go func() {
+		fmt.Println("Running http server on port", os.Getenv("HTTP_PORT"))
+		addr := fmt.Sprintf(":%s", os.Getenv("HTTP_PORT"))
+		if err := http.ListenAndServe(addr, r); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	<-ctx.Done()
+	wg.Done()
+}
 
 var startServer = &cobra.Command{
 	Use: "start",
@@ -47,26 +93,23 @@ var startServer = &cobra.Command{
 				log.Fatal(err)
 			}
 		}
+		
+		ctx, cancel := context.WithCancel(context.Background())
+		var wg sync.WaitGroup
+		wg.Add(2)
 
-		service := services.ServiceStruct{}
-		instance := service.InitialiseService(repo)
-		r := routes.InitRoutes(instance)
-		fmt.Println("env is",env)
-		if env!="local"{
-			port=os.Getenv("HTTP_PORT")
-		}
-
-		fmt.Println("Running http server on port", port)
-		addr := fmt.Sprintf(":%s", port)
-		if err := http.ListenAndServe(addr, r); err != nil {
-			log.Fatal(err)
-		}
+		go runGrpcServer(ctx, &wg)
+		go runHttpsServer(repo,ctx,&wg)
 
 		stop := make(chan os.Signal, 1)
 		signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
 		<-stop // Wait for termination signal
 		log.Println("Shutting down services...")
+
+		cancel()
+
+		wg.Wait()
 
 	},
 }

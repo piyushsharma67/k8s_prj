@@ -31,6 +31,7 @@ services:
       - .env
     environment:
       - AUTH_SERVICE_URL=http://auth-service:8080
+      - AUTH_SERVICE_GRPC_URL=auth-service:50051
 
 networks:
   microservices-network:
