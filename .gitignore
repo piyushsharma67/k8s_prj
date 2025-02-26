@@ -1,5 +1,7 @@
 .env
 auth_service/secret.text
+auth_service/tmp
+main_server/tmp
 notification_service/.env
 secret.text
 /tmp

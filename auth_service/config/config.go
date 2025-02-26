@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 // Config holds database configuration
@@ -28,8 +30,31 @@ func (c *Config) GetDSN() string {
 		c.DBUser, c.DBPassword, c.DBHost, c.DBPort, c.DBName, c.DBSSLMode)
 }
 
+func loadEnv() error {
+	if _, err := os.Stat(".env"); os.IsNotExist(err) {
+		return fmt.Errorf(".env file does not exist in the current directory")
+	}
+
+	// Load .env file
+	err := godotenv.Load(".env")
+	if err != nil {
+		return fmt.Errorf("error loading .env file: %v", err)
+	}
+
+	log.Println(".env file loaded successfully")
+	return nil
+}
+
 // LoadConfig loads configuration based on the environment
 func LoadConfig(env string) (*Config, error) {
+
+	if env == "local" {
+		err := loadEnv()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	// Load config from environment variables with defaults
 	config := &Config{

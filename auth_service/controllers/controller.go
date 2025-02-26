@@ -1,14 +1,18 @@
 package controllers
 
-import "auth_service/services"
+import (
+	"auth_service/proto"
+	"auth_service/services"
+)
 
 
 type ControllerStruct struct{
-	service *services.ServiceStruct
+	proto.UnimplementedAuthServiceServer
+	Service *services.ServiceStruct
 }
 
 func (c *ControllerStruct)InitialiseController(s *services.ServiceStruct)*ControllerStruct{
-	c.service=s
+	c.Service=s
 
 	return c
 }

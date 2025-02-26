@@ -18,30 +18,30 @@ service AuthService {
 
 // Request and Response messages for Signup
 message SignupRequest {
-  string name = 1;   // User's username
-  string password = 2; 
-  string email =3 ;  // User's password
+  string Name = 1;   // User's username
+  string Password = 2; 
+  string Email =3 ;  // User's password
 }
 
 message SignupResponse {
   int32 id = 1;  
-  string name = 2;
-  string email = 3;
-  string token = 4;
-  
+  string Name = 2;
+  string Email = 3;
+  string Token = 4;
+  string error = 5;
 }
 
 // Request and Response messages for Login
 message LoginRequest {
-  string email = 1;   // User's username
-  string password = 2;   // User's password
+  string Email = 1;   // User's username
+  string Password = 2;   // User's password
 }
 
 message LoginResponse {
   int32 id = 1;    
-  string name = 2;
-  string email = 3;
-  string token = 4;
+  string Name = 2;
+  string Email = 3;
+  string Token = 4;
 }
 
 // Request and Response messages for Token Validation
