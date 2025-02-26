@@ -27,7 +27,7 @@ func (s *ControllerStruct) Signup(ctx context.Context, details *proto.SignupRequ
 	ctx, cancel := context.WithTimeout(ctx, utils.ApiTimeoutTime)
 
 	defer cancel()
-	fmt.Println("details arre",details.Name,details)
+	
 	user, err := s.Service.InsertUserInDB(ctx, &models.User{
 		Email:    details.Email,
 		Name:     details.Name,
