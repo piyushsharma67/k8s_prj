@@ -9,14 +9,11 @@ RUN go mod download
 # Copy all source code
 COPY . .
 
-# Install Air for hot reloading in dev environment
-RUN go install github.com/air-verse/air@latest
-
-# Build the Go binary (this will build it for your local dev environment)
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o auth-server main.go
+# Build the Go binary for Linux
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app-service main.go
 
 # Ensure the binary is executable
-RUN chmod +x auth-server
+RUN chmod +x app-service
 
 # Runtime stage
 FROM alpine:latest
@@ -25,16 +22,11 @@ WORKDIR /root/
 # Install CA certificates for HTTPS/SSL support (needed for RDS)
 RUN apk add --no-cache ca-certificates
 
-# Install Air for dev environment
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev && \
-    go install github.com/air-verse/air@latest && \
-    apk del .build-deps
-
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app/auth-server .
+COPY --from=builder /app/app-service .
 
 # Expose the application port
 EXPOSE 8080
 
-# Set the correct entrypoint to run the binary with air for hot-reloading
-CMD ["air"]
+# Set the correct entrypoint to run the binary
+CMD ["./app-service","start","--env","dev"]
