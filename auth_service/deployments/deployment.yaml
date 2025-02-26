@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: piyush67sharma/auth_service:1.16  # Replace with your Docker Hub image
+        image: piyush67sharma/auth_service:1.17  # Replace with your Docker Hub image
         ports:
         - containerPort: 8080  # Adjust port based on your app
         - containerPort: 50051
