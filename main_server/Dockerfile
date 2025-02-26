@@ -29,4 +29,4 @@ COPY --from=builder /app/main_server .
 EXPOSE 8080
 
 # Set the correct entrypoint to run the binary with arguments
-CMD ["/root/main_server", "start", "--env", "local","--conn","https"]
+CMD ["/root/main_server", "start", "--env", "dev","--conn","https"]
