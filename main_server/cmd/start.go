@@ -6,7 +6,6 @@ import (
 	"log"
 	configPkg "main_server/config"
 	"main_server/enums"
-	"main_server/grpc_controller"
 	"main_server/proto"
 	"main_server/repository"
 	"main_server/routes"
@@ -28,7 +27,6 @@ var port string
 var dbType string
 var connType string
 
-
 func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	addr := fmt.Sprintf(":%s", os.Getenv("GRPC_PORT"))
 	listener, err := net.Listen("tcp", addr)
@@ -37,10 +35,10 @@ func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	}
 
 	server := grpc.NewServer()
-	proto.RegisterAuthServiceServer(server, &grpc_controller.GrpcControllerStruct{})
+	proto.RegisterAuthServiceServer(server, proto.UnimplementedAuthServiceServer{})
 
 	go func() {
-		log.Println("Starting gRPC server on port ..",os.Getenv("GRPC_PORT"))
+		log.Println("Starting gRPC server on port ..", os.Getenv("GRPC_PORT"))
 		if err := server.Serve(listener); err != nil {
 			log.Fatalf("gRPC server error: %v", err)
 		}
@@ -48,7 +46,6 @@ func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 
 	<-ctx.Done()
 	wg.Done()
-
 	server.GracefulStop()
 }
 
@@ -93,13 +90,13 @@ var startServer = &cobra.Command{
 				log.Fatal(err)
 			}
 		}
-		
+
 		ctx, cancel := context.WithCancel(context.Background())
 		var wg sync.WaitGroup
 		wg.Add(2)
 
 		go runGrpcServer(ctx, &wg)
-		go runHttpsServer(repo,ctx,&wg)
+		go runHttpsServer(repo, ctx, &wg)
 
 		stop := make(chan os.Signal, 1)
 		signal.Notify(stop, os.Interrupt, syscall.SIGTERM)

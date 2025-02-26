@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"fmt"
 	"main_server/controllers"
 	"main_server/services"
-	"fmt"
 
 	"net/http"
 
@@ -21,17 +21,15 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func InitRoutes(service *services.ServiceStruct)*mux.Router{
-	r:=mux.NewRouter()
+func InitRoutes(service *services.ServiceStruct) *mux.Router {
+	r := mux.NewRouter()
 	r.Use(LoggingMiddleware)
+	contoller := controllers.ControllerStruct{}
+	c := contoller.InitialiseController(service)
 
-	contoller:=controllers.ControllerStruct{}
-	c:=contoller.InitialiseController(service)
-
-	r.HandleFunc("/",c.Health)
-	r.HandleFunc("/v1/signup",c.SignupUser).Methods("POST")
-	r.HandleFunc("/login",c.LoginUser).Methods("GET")
-	r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcmToken)).Methods("POST")
-
+	r.HandleFunc("/", c.Health)
+	r.HandleFunc("/v1/signup", c.SignupUser).Methods("POST")
+	// r.HandleFunc("/login",c.LoginUser).Methods("GET")
+	// r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcmToken)).Methods("POST")
 	return r
 }
