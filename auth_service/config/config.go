@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
-
-	"github.com/joho/godotenv"
 )
 
 // Config holds database configuration
@@ -31,36 +28,8 @@ func (c *Config) GetDSN() string {
 		c.DBUser, c.DBPassword, c.DBHost, c.DBPort, c.DBName, c.DBSSLMode)
 }
 
-// loadEnv loads environment variables from a .env file if it exists
-func loadEnv(env string) error {
-	// Get the absolute path of the parent directory
-	dir, err := filepath.Abs(filepath.Join(".", "."))
-	if err != nil {
-		return fmt.Errorf("could not determine absolute path: %v", err)
-	}
-
-	// Load the .env file from the parent directory
-	envFile := filepath.Join(dir, ".env")
-
-	err = godotenv.Load(envFile)
-	if err != nil {
-		log.Printf("Warning: failed to load .env file from %s: %v", envFile, err)
-		// Don’t return error; proceed with existing env vars if any
-		return err
-	}
-
-	log.Printf("Successfully loaded .env file from %s", envFile)
-	return nil
-}
-
 // LoadConfig loads configuration based on the environment
 func LoadConfig(env string) (*Config, error) {
-	// Load .env file for local environment
-	if env == "local"{
-		if err := loadEnv(env); err != nil {
-			return nil, err // Only if you want to fail on env loading issues
-		}
-	}
 
 	// Load config from environment variables with defaults
 	config := &Config{

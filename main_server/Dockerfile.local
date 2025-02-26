@@ -8,7 +8,6 @@ RUN go mod download
 
 # Copy all source code
 COPY . .
-COPY .env .env
 
 # Install Air for hot reloading in dev environment
 RUN go install github.com/air-verse/air@latest
