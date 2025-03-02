@@ -32,6 +32,6 @@ func InitRoutes(service *services.ServiceStruct,auth proto.AuthServiceClient) *m
 	r.HandleFunc("/", c.Health)
 	r.HandleFunc("/signup", c.SignupUser).Methods("POST")
 	// r.HandleFunc("/login",c.LoginUser).Methods("GET")
-	// r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcmToken)).Methods("POST")
+	r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcm)).Methods("POST")
 	return r
 }

@@ -24,14 +24,3 @@ type GetUserByUserId struct{
 	Password string `json:"password"`
 }
 
-type UserFcm struct {
-	FcmToken string `json:"fcm_token"`
-}
-
-type UserFcmToken struct {
-	ID        int32            `json:"id" bson:"_id,omitempty"`
-	UserID    int32            `json:"user_id" bson:"user_id"`
-	FcmToken  string           `json:"fcm_token" bson:"fcm_token"`
-	CreatedAt pgtype.Timestamp `json:"created_at" bson:"created_at"`
-	UpdatedAt pgtype.Timestamp `json:"updated_at" bson:"updated_at"`
-}
