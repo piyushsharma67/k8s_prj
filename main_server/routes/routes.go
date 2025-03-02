@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"main_server/controllers"
 	"main_server/proto"
+	v1 "main_server/routes/v1"
 	"main_server/services"
 
 	"net/http"
@@ -22,16 +23,14 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func InitRoutes(service *services.ServiceStruct,auth proto.AuthServiceClient) *mux.Router {
+func InitRoutes(service *services.ServiceStruct, auth proto.AuthServiceClient) *mux.Router {
 	r := mux.NewRouter()
 	r.Use(LoggingMiddleware)
-	contoller := controllers.ControllerStruct{}
 
-	c := contoller.InitialiseController(service,auth)
+	r.HandleFunc("/", controllers.Health).Methods("GET")
 
-	r.HandleFunc("/", c.Health)
-	r.HandleFunc("/signup", c.SignupUser).Methods("POST")
-	// r.HandleFunc("/login",c.LoginUser).Methods("GET")
-	r.HandleFunc("/save_fc_token",Protected(c.SaveUserFcm)).Methods("POST")
+	v1Route := r.PathPrefix("/v1").Subrouter()
+	v1.RegisterRoutes(v1Route, service, auth)
+
 	return r
 }
