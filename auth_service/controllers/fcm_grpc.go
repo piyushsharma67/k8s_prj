@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (c *ControllerStruct) SaveFcmInDb(ctx context.Context, details *proto.SaveUserFcmRequest) (*proto.SaveUserFcmResponse, error) {
+func (c *ControllerStruct) SaveFcmToken(ctx context.Context, details *proto.SaveUserFcmRequest) (*proto.SaveUserFcmResponse, error) {
 	validate := validator.New()
 
 	defer func() {
@@ -28,7 +28,7 @@ func (c *ControllerStruct) SaveFcmInDb(ctx context.Context, details *proto.SaveU
 
 	defer cancel()
 
-	_, err := c.Service.SaveUserFcm(ctx, &models.CreateUserFcm{
+	fcmDetails, err := c.Service.SaveUserFcm(ctx, &models.CreateUserFcm{
 		UserId:   details.UserId,
 		FcmToken: details.FcmToken,
 	})
@@ -37,7 +37,10 @@ func (c *ControllerStruct) SaveFcmInDb(ctx context.Context, details *proto.SaveU
 		return nil, err
 	}
 
-	return nil, nil
+	return &proto.SaveUserFcmResponse{
+		FcmToken: fcmDetails.FcmToken,
+		UserId: fcmDetails.UserID,
+	}, nil
 
 }
 

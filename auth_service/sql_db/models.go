@@ -22,6 +22,7 @@ type User struct {
 	Email     string
 	Password  string
 	CreatedAt pgtype.Timestamp
+	IsActive  pgtype.Bool
 }
 
 type UserFcmToken struct {
