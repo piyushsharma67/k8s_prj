@@ -2,24 +2,22 @@ package cmd
 
 import (
 	configPkg "auth_service/config"
-	"auth_service/controllers"
+	"auth_service/controllers/common"
 	"auth_service/enums"
 	"auth_service/proto"
-	"os"
-	"os/signal"
-	"sync"
-	"syscall"
-
 	"auth_service/repository"
 	"auth_service/routes"
 	"auth_service/services"
 	"auth_service/sql_db"
 	"context"
 	"fmt"
-	"net/http"
-
 	"log"
 	"net"
+	"net/http"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/cobra"
@@ -36,7 +34,7 @@ func runGrpcServer(repo *repository.Repositories, ctx context.Context, wg *sync.
 		log.Fatal(err)
 	}
 
-	controller := &controllers.ControllerStruct{}
+	controller := &common.ControllerStruct{}
 	service := services.ServiceStruct{}
 	instance := service.InitialiseService(repo)
 

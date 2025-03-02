@@ -1,4 +1,4 @@
-package controllers
+package grpc_controller
 
 import (
 	"auth_service/models"
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (c *ControllerStruct) SaveFcmToken(ctx context.Context, details *proto.SaveUserFcmRequest) (*proto.SaveUserFcmResponse, error) {
+func (c *GRPCController) SaveFcmToken(ctx context.Context, details *proto.SaveUserFcmRequest) (*proto.SaveUserFcmResponse, error) {
 	validate := validator.New()
 
 	defer func() {
@@ -44,7 +44,7 @@ func (c *ControllerStruct) SaveFcmToken(ctx context.Context, details *proto.Save
 
 }
 
-func (c *ControllerStruct) GetUserFcm(ctx context.Context, details *proto.GetUserFcmRequest) (*proto.GetUserFcmResponse, error) {
+func (c *GRPCController) GetUserFcm(ctx context.Context, details *proto.GetUserFcmRequest) (*proto.GetUserFcmResponse, error) {
 	validate := validator.New()
 
 	defer func() {

@@ -1,4 +1,4 @@
-package controllers
+package common
 
 import (
 	"auth_service/proto"
