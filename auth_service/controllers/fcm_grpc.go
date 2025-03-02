@@ -41,7 +41,7 @@ func (c *ControllerStruct) SaveFcmInDb(ctx context.Context, details *proto.SaveU
 
 }
 
-func (c *ControllerStruct) GetUserFcm(ctx context.Context, details *proto.SaveUserFcmRequest) (*proto.GetUserFcmResponse, error) {
+func (c *ControllerStruct) GetUserFcm(ctx context.Context, details *proto.GetUserFcmRequest) (*proto.GetUserFcmResponse, error) {
 	validate := validator.New()
 
 	defer func() {
@@ -58,10 +58,7 @@ func (c *ControllerStruct) GetUserFcm(ctx context.Context, details *proto.SaveUs
 
 	defer cancel()
 
-	userFcm, err := c.Service.GetUserFcm(ctx, &models.CreateUserFcm{
-		UserId:   details.UserId,
-		FcmToken: details.FcmToken,
-	})
+	userFcm, err := c.Service.GetUserFcm(ctx, details.UserId)
 
 	if err != nil {
 		return nil, err
