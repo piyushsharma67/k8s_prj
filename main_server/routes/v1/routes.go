@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"main_server/controllers/v1_controller"
+	"main_server/controllers/v1_controllers"
 	"main_server/proto"
 	"main_server/services"
 
