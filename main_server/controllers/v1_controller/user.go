@@ -1,4 +1,4 @@
-package controllers
+package v1_controller
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func (c *ControllerStruct)SaveUserFcm(w http.ResponseWriter,r *http.Request){
+func (c *V1Controller) SignupUser(w http.ResponseWriter, r *http.Request) {
 	timestart:=time.Now()
 	if r.Method != http.MethodPost {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
@@ -29,36 +29,38 @@ func (c *ControllerStruct)SaveUserFcm(w http.ResponseWriter,r *http.Request){
 		}
 	}()
 
-	var fcm models.UserFcm
+	var user models.User
 
-	if err := json.NewDecoder(r.Body).Decode(&fcm); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		utils.ErrorResponse(w, r, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
 	validate := validator.New()
 
-	if err := validate.Struct(fcm); err != nil {
+	if err := validate.Struct(user); err != nil {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), utils.ApiTimeoutTime)
+
 	defer cancel()
 
-	userId, _ := r.Context().Value("userid").(int32)
-
-	details,err:=c.authService.SaveFcmToken(ctx,&proto.SaveUserFcmRequest{
-		FcmToken: fcm.FcmToken,
-		UserId: userId,
+	authResponse, err := c.AuthService.Signup(ctx, &proto.SignupRequest{
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
 	})
 
-	if err!=nil{
+	if err != nil {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	utils.SuccessResponse(w,models.ConvertToLowercaseRequest(details))
-
 	fmt.Println("elapsed",time.Since(timestart))
+	utils.SuccessResponse(w, &authResponse)
+
+	defer recover()
+	
+	return
 }

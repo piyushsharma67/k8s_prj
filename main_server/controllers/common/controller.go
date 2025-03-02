@@ -1,4 +1,4 @@
-package controllers
+package common
 
 import (
 	"main_server/proto"
@@ -6,12 +6,12 @@ import (
 )
 
 type ControllerStruct struct{
-	service *services.ServiceStruct
-	authService proto.AuthServiceClient
+	Service *services.ServiceStruct
+	AuthService proto.AuthServiceClient
 }
 
 func (c *ControllerStruct)InitialiseController(s *services.ServiceStruct,p proto.AuthServiceClient)*ControllerStruct{
-	c.service=s
-	c.authService=p
+	c.Service=s
+	c.AuthService=p
 	return c
 }
