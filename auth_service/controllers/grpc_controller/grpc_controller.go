@@ -9,8 +9,8 @@ type GRPCController struct {
     *common.ControllerStruct
 }
 
-func NewGRPCController(s *services.ServiceStruct) *GRPCController {
-    ctrl := &GRPCController{}
-    ctrl.InitialiseController(s)
-    return ctrl
+func (c *GRPCController)NewGRPCController(s *services.ServiceStruct) *GRPCController {
+    c.ControllerStruct=&common.ControllerStruct{}
+    c.ControllerStruct.InitialiseController(s)
+    return c
 }

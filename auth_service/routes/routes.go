@@ -29,9 +29,9 @@ func InitRoutes(service *services.ServiceStruct) *mux.Router {
 	c := contoller.NewHTTPController(service)
 
 	r.HandleFunc("/", c.Health)
-	r.HandleFunc("signup", c.SignupHttp).Methods("POST")
+	r.HandleFunc("/signup", c.SignupHttp).Methods("POST")
 	r.HandleFunc("/login", c.LoginHttp).Methods("GET")
-	r.HandleFunc("save_fc_token", Protected(c.SaveUserFcmHttp)).Methods("POST")
+	r.HandleFunc("/save_fc_token", Protected(c.SaveUserFcmHttp)).Methods("POST")
 
 	return r
 }
