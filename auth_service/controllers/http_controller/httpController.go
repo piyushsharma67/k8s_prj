@@ -11,6 +11,8 @@ type HTTPController struct {
 }
 
 func (c *HTTPController)NewHTTPController(s *services.ServiceStruct) *HTTPController {
-    c.InitialiseController(s)
+    c.ControllerStruct = &common.ControllerStruct{}
+    c.ControllerStruct.InitialiseController(s)
+
     return c
 }

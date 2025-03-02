@@ -2,7 +2,7 @@ package cmd
 
 import (
 	configPkg "auth_service/config"
-	"auth_service/controllers/common"
+	"auth_service/controllers/grpc_controller"
 	"auth_service/enums"
 	"auth_service/proto"
 	"auth_service/repository"
@@ -34,9 +34,10 @@ func runGrpcServer(repo *repository.Repositories, ctx context.Context, wg *sync.
 		log.Fatal(err)
 	}
 
-	controller := &common.ControllerStruct{}
 	service := services.ServiceStruct{}
 	instance := service.InitialiseService(repo)
+	grpcInstance:=grpc_controller.GRPCController{}
+	controller := grpcInstance.NewGRPCController(instance)
 
 	controller.Service = instance
 
