@@ -1,4 +1,4 @@
-package controllers
+package http_controller
 
 import (
 	"auth_service/models"
@@ -10,7 +10,7 @@ import (
 	"github.com/go-playground/validator"
 )
 
-func (c *ControllerStruct) SaveUserFcmHttp(w http.ResponseWriter, r *http.Request) {
+func (c *HTTPController) SaveUserFcmHttp(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodGet {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")

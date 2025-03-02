@@ -1,4 +1,4 @@
-package controllers
+package grpc_controller
 
 import (
 	"auth_service/models"
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (s *ControllerStruct) Signup(ctx context.Context, details *proto.SignupRequest) (*proto.SignupResponse, error) {
+func (s *GRPCController) Signup(ctx context.Context, details *proto.SignupRequest) (*proto.SignupResponse, error) {
 	validate := validator.New()
 
 	defer  func(){
@@ -50,7 +50,7 @@ func (s *ControllerStruct) Signup(ctx context.Context, details *proto.SignupRequ
 	}, nil
 }
 
-func (s *ControllerStruct) Login(ctx context.Context, login *proto.LoginRequest) (*proto.LoginResponse, error) {
+func (s *GRPCController) Login(ctx context.Context, login *proto.LoginRequest) (*proto.LoginResponse, error) {
 	validate := validator.New()
 	if err := validate.Struct(login); err != nil {
 		return nil, utils.GRPCErrorResponse(codes.InvalidArgument, err.Error())
@@ -81,6 +81,6 @@ func (s *ControllerStruct) Login(ctx context.Context, login *proto.LoginRequest)
 	}, nil
 }
 
-func (s *ControllerStruct) ValidateToken(context.Context, *proto.ValidateTokenRequest) (*proto.ValidateTokenResponse, error) {
+func (s *GRPCController) ValidateToken(context.Context, *proto.ValidateTokenRequest) (*proto.ValidateTokenResponse, error) {
 	return nil, nil
 }

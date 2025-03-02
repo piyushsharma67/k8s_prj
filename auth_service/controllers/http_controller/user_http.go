@@ -1,4 +1,4 @@
-package controllers
+package http_controller
 
 import (
 	"auth_service/models"
@@ -10,7 +10,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func (c *ControllerStruct) SignupHttp(w http.ResponseWriter, r *http.Request) {
+func (c *HTTPController) SignupHttp(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
 		return
@@ -45,7 +45,7 @@ func (c *ControllerStruct) SignupHttp(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (c *ControllerStruct)LoginHttp(w http.ResponseWriter,r *http.Request){
+func (c *HTTPController)LoginHttp(w http.ResponseWriter,r *http.Request){
 	if r.Method != http.MethodPost {
 		utils.ErrorResponse(w, r, http.StatusBadRequest, "Bad Request")
 		return

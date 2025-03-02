@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"auth_service/controllers"
+	"auth_service/controllers/http_controller"
 	"auth_service/services"
 	"fmt"
 
@@ -21,17 +21,17 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func InitRoutes(service *services.ServiceStruct)*mux.Router{
-	r:=mux.NewRouter()
+func InitRoutes(service *services.ServiceStruct) *mux.Router {
+	r := mux.NewRouter()
 	r.Use(LoggingMiddleware)
 
-	contoller:=controllers.ControllerStruct{}
-	c:=contoller.InitialiseController(service)
+	contoller := http_controller.HTTPController{}
+	c := contoller.NewHTTPController(service)
 
-	r.HandleFunc("/",c.Health)
-	r.HandleFunc("/v1/signup",c.SignupHttp).Methods("POST")
-	r.HandleFunc("/login",c.LoginHttp).Methods("GET")
-	r.HandleFunc("/v1/save_fc_token",Protected(c.SaveUserFcmHttp)).Methods("POST")
+	r.HandleFunc("/", c.Health)
+	r.HandleFunc("/v1/signup", c.SignupHttp).Methods("POST")
+	r.HandleFunc("/login", c.LoginHttp).Methods("GET")
+	r.HandleFunc("/v1/save_fc_token", Protected(c.SaveUserFcmHttp)).Methods("POST")
 
 	return r
 }
