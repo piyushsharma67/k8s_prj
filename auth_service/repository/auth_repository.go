@@ -27,13 +27,13 @@ func (r *PostgresRepository) InsertUserInDB(ctx context.Context, details sql_db.
 	return r.db.CreateUser(ctx, details)
 }
 
-func (r *PostgresRepository) GetUserFcmById(ctx context.Context, userId int32) (*models.UserFcmToken, error) {
+func (r *PostgresRepository) GetUserFcmById(ctx context.Context, userId int32) (*models.UserFcm, error) {
 	userFcm, err := r.db.GetUserFcmTokenByUserID(ctx, userId)
 
 	if err != nil {
 		return nil, err
 	}
-	return &models.UserFcmToken{
+	return &models.UserFcm{
 		ID:        userFcm.ID,
 		UserID:    userFcm.UserID,
 		FcmToken:  userFcm.FcmToken,
@@ -42,13 +42,16 @@ func (r *PostgresRepository) GetUserFcmById(ctx context.Context, userId int32) (
 	}, nil
 }
 
-func (r *PostgresRepository) InsertUserFcmById(ctx context.Context, details sql_db.CreateUserFcmTokenParams) (*models.UserFcmToken, error) {
-	userFcm, err := r.db.CreateUserFcmToken(ctx, details)
+func (r *PostgresRepository) InsertUserFcmById(ctx context.Context, details *models.CreateUserFcm) (*models.UserFcm, error) {
+	userFcm, err := r.db.CreateUserFcmToken(ctx, sql_db.CreateUserFcmTokenParams{
+		UserID: details.UserId,
+		FcmToken: details.FcmToken,
+	})
 
 	if err != nil {
 		return nil, err
 	}
-	return &models.UserFcmToken{
+	return &models.UserFcm{
 		ID:        userFcm.ID,
 		UserID:    userFcm.UserID,
 		FcmToken:  userFcm.FcmToken,
@@ -57,6 +60,9 @@ func (r *PostgresRepository) InsertUserFcmById(ctx context.Context, details sql_
 	}, nil
 }
 
-func (r *PostgresRepository) UpdateUserFcmById(ctx context.Context, details sql_db.UpdateUserFcmTokenParams) error {
-	return r.db.UpdateUserFcmToken(ctx, details)
+func (r *PostgresRepository) UpdateUserFcmById(ctx context.Context, details *models.CreateUserFcm) error {
+	return r.db.UpdateUserFcmToken(ctx, sql_db.UpdateUserFcmTokenParams{
+		UserID: details.UserId,
+		FcmToken: details.FcmToken,
+	})
 }

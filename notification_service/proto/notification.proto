@@ -9,11 +9,19 @@ service NotificationService {
   rpc SendMobileNotification (SendNotificationRequest) returns (SendNotificationResponse);
 }
 
+// Enum for message types
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0; // Default value (optional)
+  MAIL = 1;   // Represents an email notification
+  PUSH = 2;   // Represents a push notification
+}
+
 // Request and Response messages for Signup
 message SendNotificationRequest {
-  string userId = 1;   // User's username
-  string body = 2; 
-  string title =3 ;  // User's password
+  string UserId = 1;   // User's username
+  string Body = 2; 
+  string Title = 3 ;  // User's password
+  MessageType Type = 4;
 }
 
 message SendNotificationResponse {

@@ -30,24 +30,30 @@ func (c *Config) GetDSN() string {
 		c.DBUser, c.DBPassword, c.DBHost, c.DBPort, c.DBName, c.DBSSLMode)
 }
 
-// loadEnv loads environment variables from a .env file if it exists
-func loadEnv(env string) error {
-	if env == "local" {
-		err := godotenv.Load() // Explicit file for local dev
-		if err != nil {
-			log.Printf("Warning: failed to load .env.local file: %v", err)
-			// Don’t return error; proceed with existing env vars if any
-		}
+func loadEnv() error {
+	if _, err := os.Stat(".env"); os.IsNotExist(err) {
+		return fmt.Errorf(".env file does not exist in the current directory")
 	}
-	// For non-local (e.g., stage), assume env vars are injected (e.g., via Kubernetes Secrets)
+
+	// Load .env file
+	err := godotenv.Load(".env")
+	if err != nil {
+		return fmt.Errorf("error loading .env file: %v", err)
+	}
+
+	log.Println(".env file loaded successfully")
 	return nil
 }
 
 // LoadConfig loads configuration based on the environment
 func LoadConfig(env string) (*Config, error) {
-	// Load .env file for local environment
-	if err := loadEnv(env); err != nil {
-		return nil, err // Only if you want to fail on env loading issues
+
+	if env == "local" {
+		err := loadEnv()
+
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	// Load config from environment variables with defaults

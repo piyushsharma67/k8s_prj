@@ -57,39 +57,3 @@ func (r *ServiceStruct) GetUserByEmail(ctx context.Context, user *models.User) (
 	}
 	return user,nil
 }
-
-func (r *ServiceStruct) InsertUserFCMInDB(ctx context.Context, fcmToken string) error {
-
-	userId, _ := ctx.Value("userId").(int32)
-	_, err := r.Repository.AuthRepo.GetUserFcmById(ctx, userId)
-
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			createUserFcmToken := sql_db.CreateUserFcmTokenParams{
-				FcmToken: fcmToken,
-				UserID:   userId,
-			}
-			_, err := r.Repository.AuthRepo.InsertUserFcmById(ctx, createUserFcmToken)
-
-			if err != nil {
-				return err
-			}
-
-			return nil
-		}
-	}
-
-	updateFcmToken := sql_db.UpdateUserFcmTokenParams{
-		UserID:   userId,
-		FcmToken: fcmToken,
-	}
-
-	err = r.Repository.AuthRepo.UpdateUserFcmById(ctx, updateFcmToken)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-
-}
