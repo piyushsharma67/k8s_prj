@@ -15,11 +15,13 @@ service AuthService {
   // ValidateToken method for checking if a JWT token is valid
   rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
 
+  //Get user details method
   rpc GetUserById(GetUserByIdRequest)returns (GetUserByIdResponse);
 
-  //SaveFcm method of the user
+  //Save Fcm method of the user
   rpc SaveFcmToken(SaveUserFcmRequest)returns (SaveUserFcmResponse);
 
+  //Get Fcm method of the user
   rpc GetUserFcm(GetUserFcmRequest) returns (GetUserFcmResponse);
 }
 

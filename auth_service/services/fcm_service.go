@@ -18,8 +18,8 @@ func (s *ServiceStruct) SaveUserFcm(ctx context.Context, details *models.CreateU
 	return userDetails, err
 }
 
-func (s *ServiceStruct) GetUserFcm(ctx context.Context, details *models.CreateUserFcm) (*models.UserFcm, error) {
-	userDetails, err := s.Repository.AuthRepo.GetUserFcmById(ctx, details.UserId)
+func (s *ServiceStruct) GetUserFcm(ctx context.Context, userId int32) (*models.UserFcm, error) {
+	userDetails, err := s.Repository.AuthRepo.GetUserFcmById(ctx, userId)
 
 	if err != nil {
 		return nil, err
