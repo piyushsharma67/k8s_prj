@@ -8,6 +8,7 @@ import (
 	"notification_service/controllers/grpc_controller"
 	"notification_service/enums"
 	"notification_service/proto/auth"
+	"notification_service/proto/notification"
 	"notification_service/repository"
 	"notification_service/services"
 	"notification_service/sql_db"
@@ -26,19 +27,20 @@ var port string
 var dbType string
 var connType string
 
-func startGrpcServer(ctx context.Context, wg *sync.WaitGroup,repo *repository.Repository) {
+func startGrpcServer(ctx context.Context, wg *sync.WaitGroup, repo *repository.Repository) {
 	listener, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	service:=services.InitialiseService(repo)
-	grpcController:=&grpc_controller.GRPCController{}
+	service := services.InitialiseService(repo)
+	grpcController := &grpc_controller.GRPCController{}
 
-	grpcController.InitialiseController(service)
+	controller := grpcController.NewGRPCController(service)
 
 	// Register your gRPC service here
-	auth.RegisterAuthServiceServer(grpcServer,auth.UnimplementedAuthServiceServer{})
+	auth.RegisterAuthServiceServer(grpcServer, auth.UnimplementedAuthServiceServer{})
+	notification.RegisterNotificationServiceServer(grpcServer, controller)
 
 	go func() {
 		log.Println("Starting gRPC server on port 50051...")
@@ -80,13 +82,12 @@ var startServer = &cobra.Command{
 				log.Fatal(err)
 			}
 		}
-		
 
 		var wg sync.WaitGroup
 
 		wg.Add(1) // Number of services to wait for
 
-		go startGrpcServer(ctx, &wg,repo)
+		go startGrpcServer(ctx, &wg, repo)
 		// go startHttpServer(ctx, &wg)
 		// go startSqsListener(ctx, &wg)
 

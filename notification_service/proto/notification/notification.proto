@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package proto;
+package notification;
 
 option go_package = "/proto/notification";
 

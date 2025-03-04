@@ -9,6 +9,5 @@ type ControllerStruct struct{
 
 func (c *ControllerStruct)InitialiseController(s *services.ServiceStruct)*ControllerStruct{
 	c.Service=s
-
 	return c
 }
