@@ -3,6 +3,7 @@ package routes
 import (
 	"auth_service/controllers/http_controller"
 	"auth_service/services"
+	"auth_service/utils"
 	"fmt"
 
 	"net/http"
@@ -31,7 +32,7 @@ func InitRoutes(service *services.ServiceStruct) *mux.Router {
 	r.HandleFunc("/", c.Health)
 	r.HandleFunc("/signup", c.SignupHttp).Methods("POST")
 	r.HandleFunc("/login", c.LoginHttp).Methods("GET")
-	r.HandleFunc("/save_fc_token", Protected(c.SaveUserFcmHttp)).Methods("POST")
+	r.HandleFunc("/save_fc_token", utils.Protected(c.SaveUserFcmHttp)).Methods("POST")
 
 	return r
 }

@@ -1,1 +1,2 @@
 protoc --proto_path=. --go_out=. --go-grpc_out=. auth.proto
+protoc --proto_path=. --go_out=. --go-grpc_out=. notification.proto
