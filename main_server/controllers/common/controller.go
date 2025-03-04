@@ -1,17 +1,20 @@
 package common
 
 import (
-	"main_server/proto"
+	"main_server/proto/auth"
+	"main_server/proto/notification"
 	"main_server/services"
 )
 
-type ControllerStruct struct{
-	Service *services.ServiceStruct
-	AuthService proto.AuthServiceClient
+type ControllerStruct struct {
+	Service     *services.ServiceStruct
+	AuthService auth.AuthServiceClient
+	NotificationServcie notification.NotificationServiceClient
 }
 
-func (c *ControllerStruct)InitialiseController(s *services.ServiceStruct,p proto.AuthServiceClient)*ControllerStruct{
-	c.Service=s
-	c.AuthService=p
+func (c *ControllerStruct) InitialiseController(s *services.ServiceStruct, p auth.AuthServiceClient,n  notification.NotificationServiceClient) *ControllerStruct {
+	c.Service = s
+	c.AuthService = p
+	c.NotificationServcie=n
 	return c
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/joho/godotenv"
 )
-
 // Config holds database configuration
 type Config struct {
 	DBHost     string `yaml:"db_host"`

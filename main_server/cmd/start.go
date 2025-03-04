@@ -6,7 +6,7 @@ import (
 	"log"
 	configPkg "main_server/config"
 	"main_server/enums"
-	"main_server/proto"
+	"main_server/proto/auth"
 	"main_server/repository"
 	"main_server/routes"
 	"main_server/services"
@@ -35,7 +35,7 @@ func runGrpcServer(ctx context.Context, wg *sync.WaitGroup) {
 	}
 
 	server := grpc.NewServer()
-	proto.RegisterAuthServiceServer(server, proto.UnimplementedAuthServiceServer{})
+	auth.RegisterAuthServiceServer(server, auth.UnimplementedAuthServiceServer{})
 
 	go func() {
 		log.Println("Starting gRPC server on port ..", os.Getenv("GRPC_PORT"))
@@ -57,8 +57,8 @@ func runHttpsServer(repo *repository.Repositories, ctx context.Context, wg *sync
 	if err != nil {
 		log.Fatalf("did not connect to auth service: %v", err)
 	}
-	authServiceClient := proto.NewAuthServiceClient(grpcConn)
-	r := routes.InitRoutes(instance,authServiceClient)
+	authServiceClient := auth.NewAuthServiceClient(grpcConn)
+	r := routes.InitRoutes(instance, authServiceClient)
 
 	go func() {
 		fmt.Println("Running http server on port", os.Getenv("HTTP_PORT"))

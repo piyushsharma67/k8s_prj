@@ -1,12 +1,12 @@
 package services
 
 import (
-	"main_server/proto"
+	"main_server/proto/auth"
 	"main_server/repository"
 )
 
 type ServiceStruct struct {
-	proto.UnimplementedAuthServiceServer
+	auth.UnimplementedAuthServiceServer
 	Repository *repository.Repositories
 }
 

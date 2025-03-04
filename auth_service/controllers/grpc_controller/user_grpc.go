@@ -2,7 +2,7 @@ package grpc_controller
 
 import (
 	"auth_service/models"
-	"auth_service/proto"
+	"auth_service/proto/auth"
 	"auth_service/utils"
 	"context"
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (s *GRPCController) Signup(ctx context.Context, details *proto.SignupRequest) (*proto.SignupResponse, error) {
+func (s *GRPCController) Signup(ctx context.Context, details *auth.SignupRequest) (*auth.SignupResponse, error) {
 	validate := validator.New()
 
 	defer  func(){
@@ -42,7 +42,7 @@ func (s *GRPCController) Signup(ctx context.Context, details *proto.SignupReques
 	if err != nil {
 		return nil, utils.GRPCErrorResponse(codes.InvalidArgument, err.Error())
 	}
-	return &proto.SignupResponse{
+	return &auth.SignupResponse{
 		Name:  user.Name,
 		Email: user.Email,
 		Id:    user.ID,
@@ -50,7 +50,7 @@ func (s *GRPCController) Signup(ctx context.Context, details *proto.SignupReques
 	}, nil
 }
 
-func (s *GRPCController) Login(ctx context.Context, login *proto.LoginRequest) (*proto.LoginResponse, error) {
+func (s *GRPCController) Login(ctx context.Context, login *auth.LoginRequest) (*auth.LoginResponse, error) {
 	validate := validator.New()
 	if err := validate.Struct(login); err != nil {
 		return nil, utils.GRPCErrorResponse(codes.InvalidArgument, err.Error())
@@ -73,7 +73,7 @@ func (s *GRPCController) Login(ctx context.Context, login *proto.LoginRequest) (
 	if err != nil {
 		return nil, utils.GRPCErrorResponse(codes.InvalidArgument, err.Error())
 	}
-	return &proto.LoginResponse{
+	return &auth.LoginResponse{
 		Name:  user.Name,
 		Email: user.Email,
 		Id:    user.ID,
@@ -81,6 +81,6 @@ func (s *GRPCController) Login(ctx context.Context, login *proto.LoginRequest) (
 	}, nil
 }
 
-func (s *GRPCController) ValidateToken(context.Context, *proto.ValidateTokenRequest) (*proto.ValidateTokenResponse, error) {
+func (s *GRPCController) ValidateToken(context.Context, *auth.ValidateTokenRequest) (*auth.ValidateTokenResponse, error) {
 	return nil, nil
 }

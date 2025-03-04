@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: main_server/proto/auth.proto
+// source: proto/auth/auth.proto
 
-package proto
+package auth
 
 import (
 	context "context"
@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_Signup_FullMethodName        = "/proto.AuthService/Signup"
-	AuthService_Login_FullMethodName         = "/proto.AuthService/Login"
-	AuthService_ValidateToken_FullMethodName = "/proto.AuthService/ValidateToken"
-	AuthService_GetUserById_FullMethodName   = "/proto.AuthService/GetUserById"
-	AuthService_SaveFcmToken_FullMethodName  = "/proto.AuthService/SaveFcmToken"
-	AuthService_GetUserFcm_FullMethodName    = "/proto.AuthService/GetUserFcm"
+	AuthService_Signup_FullMethodName        = "/auth.AuthService/Signup"
+	AuthService_Login_FullMethodName         = "/auth.AuthService/Login"
+	AuthService_ValidateToken_FullMethodName = "/auth.AuthService/ValidateToken"
+	AuthService_GetUserById_FullMethodName   = "/auth.AuthService/GetUserById"
+	AuthService_SaveFcmToken_FullMethodName  = "/auth.AuthService/SaveFcmToken"
+	AuthService_GetUserFcm_FullMethodName    = "/auth.AuthService/GetUserFcm"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -294,7 +294,7 @@ func _AuthService_GetUserFcm_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.AuthService",
+	ServiceName: "auth.AuthService",
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -323,5 +323,5 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "main_server/proto/auth.proto",
+	Metadata: "proto/auth/auth.proto",
 }
