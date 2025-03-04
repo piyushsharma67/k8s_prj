@@ -4,7 +4,7 @@ import (
 	configPkg "auth_service/config"
 	"auth_service/controllers/grpc_controller"
 	"auth_service/enums"
-	"auth_service/proto"
+	"auth_service/proto/auth"
 	"auth_service/repository"
 	"auth_service/routes"
 	"auth_service/services"
@@ -42,7 +42,7 @@ func runGrpcServer(repo *repository.Repositories, ctx context.Context, wg *sync.
 	controller.Service = instance
 
 	server := grpc.NewServer()
-	proto.RegisterAuthServiceServer(server, controller)
+	auth.RegisterAuthServiceServer(server, controller)
 
 	go func() {
 		log.Println("Starting gRPC server on port ..", os.Getenv("GRPC_PORT"))

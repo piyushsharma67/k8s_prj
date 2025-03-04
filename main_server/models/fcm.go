@@ -1,7 +1,7 @@
 package models
 
 import (
-	"main_server/proto"
+	"main_server/proto/auth"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -23,7 +23,7 @@ type SaveUserFcmRequestLowercase struct {
 	UserId   int32  `json:"userId,omitempty"`
 }
 
-func ConvertToLowercaseRequest(req *proto.SaveUserFcmResponse) *SaveUserFcmRequestLowercase {
+func ConvertToLowercaseRequest(req *auth.SaveUserFcmResponse) *SaveUserFcmRequestLowercase {
 	return &SaveUserFcmRequestLowercase{
 		FcmToken: req.GetFcmToken(),
 		UserId:   req.GetUserId(),

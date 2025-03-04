@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "/proto/notification";
+
+// AuthService defines the gRPC service for authentication
+service NotificationService {
+    rpc SendPushNotification(SendPushNotificationRequest)returns (SendPushNotificationResponse);
+}
+
+message SendPushNotificationRequest {
+    int32 UserId =1;
+}
+
+message SendPushNotificationResponse {
+    bool Sent =1;
+    string Error =2;
+}

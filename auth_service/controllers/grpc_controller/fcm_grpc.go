@@ -2,7 +2,7 @@ package grpc_controller
 
 import (
 	"auth_service/models"
-	"auth_service/proto"
+	"auth_service/proto/auth"
 	"auth_service/utils"
 	"context"
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (c *GRPCController) SaveFcmToken(ctx context.Context, details *proto.SaveUserFcmRequest) (*proto.SaveUserFcmResponse, error) {
+func (c *GRPCController) SaveFcmToken(ctx context.Context, details *auth.SaveUserFcmRequest) (*auth.SaveUserFcmResponse, error) {
 	validate := validator.New()
 
 	defer func() {
@@ -37,14 +37,14 @@ func (c *GRPCController) SaveFcmToken(ctx context.Context, details *proto.SaveUs
 		return nil, err
 	}
 
-	return &proto.SaveUserFcmResponse{
+	return &auth.SaveUserFcmResponse{
 		FcmToken: fcmDetails.FcmToken,
 		UserId: fcmDetails.UserID,
 	}, nil
 
 }
 
-func (c *GRPCController) GetUserFcm(ctx context.Context, details *proto.GetUserFcmRequest) (*proto.GetUserFcmResponse, error) {
+func (c *GRPCController) GetUserFcm(ctx context.Context, details *auth.GetUserFcmRequest) (*auth.GetUserFcmResponse, error) {
 	validate := validator.New()
 
 	defer func() {
@@ -67,7 +67,7 @@ func (c *GRPCController) GetUserFcm(ctx context.Context, details *proto.GetUserF
 		return nil, err
 	}
 
-	return &proto.GetUserFcmResponse{
+	return &auth.GetUserFcmResponse{
 		FcmToken: userFcm.FcmToken,
 		UserId: userFcm.UserID,
 		Error: nil,

@@ -2,7 +2,7 @@ package routes
 
 import (
 	"main_server/controllers"
-	"main_server/proto"
+	"main_server/proto/auth"
 	v1 "main_server/routes/v1"
 	"main_server/services"
 	"main_server/utils"
@@ -12,8 +12,7 @@ import (
 
 var P string
 
-
-func InitRoutes(service *services.ServiceStruct, auth proto.AuthServiceClient) *mux.Router {
+func InitRoutes(service *services.ServiceStruct, auth auth.AuthServiceClient) *mux.Router {
 	r := mux.NewRouter()
 	r.Use(utils.LoggingMiddleware)
 

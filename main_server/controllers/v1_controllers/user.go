@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"main_server/models"
-	"main_server/proto"
+	"main_server/proto/auth"
 	"main_server/utils"
 	"net/http"
 	"time"
@@ -47,7 +47,7 @@ func (c *V1Controller) SignupUser(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	authResponse, err := c.AuthService.Signup(ctx, &proto.SignupRequest{
+	authResponse, err := c.AuthService.Signup(ctx, &auth.SignupRequest{
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: user.Password,

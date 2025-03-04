@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"main_server/models"
-	"main_server/proto"
+	"main_server/proto/auth"
 	"main_server/utils"
 	"net/http"
 	"time"
@@ -48,7 +48,7 @@ func (c *V1Controller)SaveUserFcm(w http.ResponseWriter,r *http.Request){
 
 	userId, _ := r.Context().Value("userid").(int32)
 
-	details,err:=c.AuthService.SaveFcmToken(ctx,&proto.SaveUserFcmRequest{
+	details,err:=c.AuthService.SaveFcmToken(ctx,&auth.SaveUserFcmRequest{
 		FcmToken: fcm.FcmToken,
 		UserId: userId,
 	})

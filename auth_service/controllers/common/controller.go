@@ -1,13 +1,13 @@
 package common
 
 import (
-	"auth_service/proto"
+	"auth_service/proto/auth"
 	"auth_service/services"
 )
 
 
 type ControllerStruct struct{
-	proto.UnimplementedAuthServiceServer
+	auth.UnimplementedAuthServiceServer
 	Service *services.ServiceStruct
 }
 
