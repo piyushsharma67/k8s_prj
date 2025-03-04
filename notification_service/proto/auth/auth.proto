@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "/proto/auth";
+
+// AuthService defines the gRPC service for authentication
+service AuthService {
+  //Get user details method
+  rpc GetUserById(GetUserByIdRequest)returns (GetUserByIdResponse);
+  
+  //Get Fcm method of the user
+  rpc GetUserFcm(GetUserFcmRequest) returns (GetUserFcmResponse);
+}
+
+// Request and Response messages for Signup
+message SignupRequest {
+  string Name = 1;   // User's username
+  string Password = 2; 
+  string Email =3 ;  // User's password
+}
+
+message SignupResponse {
+  int32 id = 1;  
+  string Name = 2;
+  string Email = 3;
+  string Token = 4;
+  optional string error = 5;
+}
+
+// Request and Response messages for Login
+message LoginRequest {
+  string Email = 1;   // User's username
+  string Password = 2;   // User's password
+}
+
+message LoginResponse {
+  int32 id = 1;    
+  string Name = 2;
+  string Email = 3;
+  string Token = 4;
+}
+
+// Request and Response messages for Token Validation
+message ValidateTokenRequest {
+  string token = 1;      // JWT token to be validated
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;        // Boolean indicating whether the token is valid
+}
+
+message GetUserByIdRequest{
+  int32 UserId =1;
+}
+
+message GetUserByIdResponse{
+  int32 id = 1;    
+  string Name = 2;
+  string Email = 3;
+  optional string Error = 4;
+}
+
+message SaveUserFcmRequest{
+  string FcmToken =1;
+  int32 UserId =2;
+}
+
+message SaveUserFcmResponse{
+  string FcmToken =1;
+  int32 UserId =2;
+  optional string error =3;
+}
+
+message GetUserFcmRequest{
+  int32 UserId =2;
+}
+
+message GetUserFcmResponse{
+  string FcmToken =1;
+  int32 UserId =2;
+  optional string error =3;
+}
