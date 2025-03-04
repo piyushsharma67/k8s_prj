@@ -1,9 +1,13 @@
 package common
 
-import "notification_service/services"
+import (
+	"notification_service/proto/notification"
+	"notification_service/services"
+)
 
 
 type ControllerStruct struct{
+	notification.UnimplementedNotificationServiceServer
 	Service *services.ServiceStruct
 }
 

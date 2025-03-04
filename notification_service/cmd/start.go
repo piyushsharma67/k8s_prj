@@ -39,8 +39,8 @@ func startGrpcServer(ctx context.Context, wg *sync.WaitGroup, repo *repository.R
 	controller := grpcController.NewGRPCController(service)
 
 	// Register your gRPC service here
-	auth.RegisterAuthServiceServer(grpcServer, auth.UnimplementedAuthServiceServer{})
 	notification.RegisterNotificationServiceServer(grpcServer, controller)
+	auth.RegisterAuthServiceServer(grpcServer, auth.UnimplementedAuthServiceServer{})
 
 	go func() {
 		log.Println("Starting gRPC server on port 50051...")
