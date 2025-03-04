@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.local  
     container_name: auth-service_local
     ports:
-      - "8080:8080"  # Mapping the port inside the container to your local machine
+      - "8081:8081"  # Mapping the port inside the container to your local machine
     volumes:
       - ./auth_service:/app 
     networks:
@@ -16,7 +16,23 @@ services:
       - .env
     environment:
       - GRPC_PORT=50051
-      - HTTP_PORT=8080
+      - HTTP_PORT=8081
+  notification-service:
+    build:
+      context: ./notification_service   # Path to the auth_service folder
+      dockerfile: Dockerfile.local  
+    container_name: notification-service_local
+    ports:
+      - "8082:8082"  # Mapping the port inside the container to your local machine
+    volumes:
+      - ./auth_service:/app 
+    networks:
+      - microservices-network
+    env_file:
+      - .env
+    environment:
+      - GRPC_PORT=50052
+      - HTTP_PORT=8082
 
   main-server:
     build:
@@ -24,7 +40,7 @@ services:
       dockerfile: Dockerfile.local  
     container_name: main-server_local
     ports:
-      - "8081:8081"  # Mapping the port inside the container to your local machine
+      - "8080:8080"  # Mapping the port inside the container to your local machine
     networks:
       - microservices-network
     depends_on:
@@ -34,10 +50,13 @@ services:
     volumes:
       - ./main_server:/app 
     environment:
-      - AUTH_SERVICE_URL=http://auth-service:8080
+      - GRPC_PORT=50050
+      - HTTP_PORT=8080
+      - AUTH_SERVICE_HTTP_URL=http://auth-service:8081
       - AUTH_SERVICE_GRPC_URL=auth-service:50051
-      - GRPC_PORT=50052
-      - HTTP_PORT=8081
+      - NOTIFICATION_SERVICE_HTTP_URL=http://auth-service:8082
+      - NOTIFICATION_SERVICE_GRPC_URL=auth-service:50052
+      
 
 networks:
   microservices-network:
